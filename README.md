@@ -19,6 +19,20 @@ the library apis and create a tree and test all the apis.
 3. Build the application and the bin file name is "bstmain"
 > make main
 
+OTHER OPTIONs for more control
+
+// For compiling the bst tree library and test app
+gcc -c -fpic bst.c
+gcc -c -fpic stack.c
+gcc -shared -o libbst.so stack.o bst.o
+gcc -L/home/subchhot/cprograms/tree/ -Wl,-rpath=/home/subchhot/cprograms/tree -ggdb -o newbstmain tree_main.c -lbst
+
+//for building only the queue library and the test app replace the path properly
+//
+gcc -c  -fpic queue.c
+gcc -shared -o libqueue.so queue.o
+gcc -L/home/subchhot/cprograms/tree/ -Wl,-rpath=/home/subchhot/cprograms/tree -ggdb -o test_queue queue_test.c -lqueue
+
 ==========================================================
 
 Run the client app by executing
