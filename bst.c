@@ -3,6 +3,7 @@
 #include <string.h>
 #include "bst.h"
 #include "stack.h"
+#include "queue.h"
 
 int max(int a,int b)
 {
@@ -115,6 +116,7 @@ int total_nodes(tree_nd *node)
 void inorder(tree_nd *node,int total_elem)
 {
      tree_nd *ptr=NULL;
+     void **stack = NULL;
      if (node == NULL) {
         return;
      }
@@ -123,27 +125,112 @@ void inorder(tree_nd *node,int total_elem)
       * max the stack size need to be total elem in the tree
       */
      printf("\n Creating the stack for traversal"); 
-     if (!create_stack(total_elem)) {
+     stack = create_stack(total_elem);
+     if (!stack) {
          printf("\n Failed to create the stack for the tree of size"
                 "%d",total_elem);
          return;
      }
      
      ptr = node; 
-     while (ptr || !(isStack_empty())) {
+     while (ptr || !(isStack_empty(stack))) {
 
          while (ptr) {
-            push((void *)ptr);
+            push(stack,(void *)ptr);
             ptr=ptr->dir[0];
          }
 
-         ptr = (tree_nd *)pop();
+         ptr = (tree_nd *)pop(stack);
          printf("\n %d",ptr->data);
          ptr = ptr->dir[1];
 
      }
-     delete_stack(); 
+     delete_stack(stack); 
      return;          
+}
+
+void level_order(tree_nd *root)
+{
+    tree_nd *curr = NULL;
+    int total_elem = 0;
+    if (!root) {
+        printf("\n Root is null, cant print tree");
+        return;
+    }
+    /* Now create the QUEUE to store the tree elem */
+    total_elem = total_nodes(root);
+    if (!create_queue(total_elem)) {
+        printf("\n Queue create failed");
+        return;
+    }
+    curr = root;
+    enqueue((void *)curr);
+    while (curr && !isqueue_empty()) {
+         curr = (tree_nd *)queue_frontelem();
+         dequeue();
+         printf ("\t %d",curr->data);
+
+         if (curr->dir[0]) {
+             enqueue(curr->dir[0]);
+         } 
+         if (curr->dir[1]) {
+             enqueue(curr->dir[1]);
+         } 
+   }
+   delete_queue();
+   return;
+}
+    
+void level_order_spiral(tree_nd *root)
+{
+    tree_nd *curr = NULL , *temp = NULL;
+    void **stack1 = NULL, **stack2 = NULL;
+    int total_elem = 0;
+
+    if (!root) {
+        printf("\n Root is null, cant print tree");
+        return;
+    }
+    /* Now create the QUEUE to store the tree elem */
+    total_elem = total_nodes(root);
+    stack1 = create_stack(total_elem);
+    stack2 = create_stack(total_elem);
+    if (!stack1 || !stack2) {
+        printf("\n Stack create failed");
+        return;
+    }
+    curr = root;
+          push(stack1,(void *)curr);
+    while (!isStack_empty(stack1) || !isStack_empty(stack2)) {
+         while (!isStack_empty(stack1)) {
+             curr = (tree_nd *)stack_topelement(stack1);
+             printf("\t %d",curr->data);
+             temp = (tree_nd *)pop(stack1);
+            
+             if (curr->dir[1]) {
+                push(stack2,(void *)curr->dir[1]);
+             }
+             if (curr->dir[0]) {
+                push(stack2,(void *)curr->dir[0]);
+             }
+         }
+
+         while (!isStack_empty(stack2)) {
+             curr = (tree_nd *)stack_topelement(stack2);
+             printf("\t %d",curr->data);
+             temp = (tree_nd *)pop(stack2);
+
+             if (curr->dir[0]) {
+                push(stack1,(void *)curr->dir[0]);
+             }
+             if (curr->dir[1]) {
+                push(stack1,(void *)curr->dir[1]);
+             }
+         }
+   }
+   delete_stack(stack1);
+   delete_stack(stack2);
+   return;
 }
 
 int tree_height(tree_nd *node)

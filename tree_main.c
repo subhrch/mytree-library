@@ -34,6 +34,14 @@ int main(void)
         printf("\n Total elements in tree %d",total_nd);
         printf("\n Total height of the tree is %d",tree_height(ROOT));
         /*inorder_recur(ROOT);*/
+        printf("\n >>>>>>>>>>> IORDER <<<<<<<<<<<<<\n");
         inorder(ROOT,total_nd);
+        printf("\n========================================");
+        printf("\n >>>>>>>>>>> LEVEL-ORDER <<<<<<<<<<<<<\n");
+        level_order(ROOT);
+        printf("\n========================================");
+        printf("\n >>>>>>>>>>> SPIRAL L-ORDER <<<<<<<<<<<<<\n");
+        level_order_spiral(ROOT);
+        printf("\n========================================"); 
         return 0;
 }

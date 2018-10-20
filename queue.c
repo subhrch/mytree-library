@@ -48,8 +48,8 @@ bool isqueue_empty()
 
 bool isqueue_full()
 {
-   if (front == (q_size-1) ||
-       rear == (q_size-1))
+   if (front == (q_size) ||
+       rear == (q_size))
    {
       return TRUE;
    } else {
@@ -91,7 +91,7 @@ void dequeue()
            front = -1;
            rear = 0;
        }
-       free (temp);
+       //free (temp);
        return;
    }
    else 
